@@ -335,9 +335,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.8" >
+        <li class="chapter " data-level="1.8" data-path="../deployment/">
             
-                <a target="_blank" href="https://github.com/Ocelot-Social-Community/Ocelot-Social-Deploy-Rebranding/blob/master/deployment/README.md">
+                <a href="../deployment/">
             
                     
                     Deployment
@@ -471,6 +471,41 @@ or on Debian-based systems install <a href="http://debian.neo4j.org/" target="_b
 Just be sure to update the Neo4j connection string and credentials accordingly
 in <code>backend/.env</code>.</p>
 <p>Start Neo4J and confirm the database is running at <a href="http://localhost:7474" target="_blank">http://localhost:7474</a>.</p>
+<h2 id="operations-on-neo4j">Operations on Neo4j</h2>
+<h3 id="docker-or-docker-compose">Docker or Docker Compose</h3>
+<ul>
+<li>we need to set <code>command: [&quot;tail&quot;, &quot;-f&quot;, &quot;/dev/null&quot;]</code> in the Neo4j block of <code>docker-compose.yml</code> on top level so the Neo4j database is in maintenance mode</li>
+</ul>
+<h3 id="create-neo4j-dump">Create Neo4j Dump</h3>
+<p>To create a dump in Neo4j running in a Docker container:</p>
+<ul>
+<li>set the database to maintenance mode, see above</li>
+<li>entering the following commands:</li>
+</ul>
+<pre><code class="lang-bash"><span class="hljs-comment"># connect to the Docker containers Neo4j terminal</span>
+$ docker <span class="hljs-built_in">exec</span> -it neo4j bash
+<span class="hljs-comment"># generate Dump</span>
+neo4j% neo4j-admin dump --database=graph.db --to=/var/lib/neo4j/$(date +%F)-neo4j-dump
+<span class="hljs-comment"># exit bash</span>
+neo4j% <span class="hljs-built_in">exit</span>
+<span class="hljs-comment"># copy the dump out of the running Docker container</span>
+$ docker cp &lt;docker-image-name(<span class="hljs-string">&apos;neo4j&apos;</span>)&gt;:/var/lib/neo4j/neo4j-dump &lt;<span class="hljs-built_in">local</span>-folder-path&gt;/$(date +%F)-neo4j-dump
+</code></pre>
+<h3 id="import-neo4j-dump">Import Neo4j Dump</h3>
+<p>To import a dump into Neo4j running in a Docker container:</p>
+<ul>
+<li>set the database to maintenance mode, see above</li>
+<li>entering the following commands:</li>
+</ul>
+<pre><code class="lang-bash"><span class="hljs-comment"># copy the dump into the running Docker container</span>
+$ docker cp &lt;<span class="hljs-built_in">local</span>-folder-path&gt;/neo4j-dump &lt;docker-image-name(<span class="hljs-string">&apos;neo4j&apos;</span>)&gt;:/var/lib/neo4j/$(date +%F)-neo4j-dump
+<span class="hljs-comment"># connect to the Docker containers Neo4j terminal</span>
+$ docker <span class="hljs-built_in">exec</span> -it neo4j bash
+<span class="hljs-comment"># to load the dump into the database we need the following command in this terminal</span>
+neo4j% neo4j-admin load --expand-commands --database=graph.db --from /var/lib/neo4j/$(date +%F)-neo4j-dump --force
+<span class="hljs-comment"># leave the terminal by entering</span>
+neo4j% <span class="hljs-built_in">exit</span>
+</code></pre>
 <h2 id="commands">Commands</h2>
 <p>Here we describe some rarely used Cypher commands for Neo4j that are needed from time to time:</p>
 <h3 id="index-and-constraint-commands">Index And Constraint Commands</h3>
@@ -567,7 +602,7 @@ $ CALL apoc.schema.assert({},{},<span class="hljs-literal">true</span>) YIELD la
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Neo4J","level":"1.3","depth":1,"next":{"title":"Backend","level":"1.4","depth":1,"path":"backend/README.md","ref":"backend/README.md","articles":[{"title":"GraphQL","level":"1.4.1","depth":2,"path":"backend/graphql.md","ref":"backend/graphql.md","articles":[]},{"title":"neo4j-graphql-js","level":"1.4.2","depth":2,"path":"backend/neo4j-graphql-js.md","ref":"backend/neo4j-graphql-js.md","articles":[]}]},"previous":{"title":"Edit this Documentation","level":"1.2","depth":1,"path":"edit-this-documentation.md","ref":"edit-this-documentation.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","-sharing","hints","tabs2","theme-simple@git+https://github.com/plugins-zander/gitbook-plugin-theme-simple.git","search-pro@git+https://github.com/plugins-zander/gitbook-plugin-search-pro.git","splitter@git+https://github.com/plugins-zander/gitbook-plugin-splitter.git","edit-link@git+https://github.com/plugins-zander/gitbook-plugin-edit-link.git","gtag@git+https://github.com/plugins-zander/gitbook-plugin-gtag.git","chapter-fold@git+https://github.com/plugins-zander/gitbook-plugin-chapter-fold.git","copy-code-button@git+https://github.com/plugins-zander/gitbook-plugin-copy-code-button.git"],"styles":{"ebook":"styles/ebook.css","epub":"styles/epub.css","mobi":"styles/mobi.css","pdf":"styles/pdf.css","print":"styles/print.css","website":"styles/website.css"},"pluginsConfig":{"chapter-fold":{},"splitter":{},"search-pro":{},"hints":{"danger":"fa fa-exclamation-circle","info":"fa fa-info-circle","tip":"fa fa-mortar-board","working":"fa fa-wrench"},"sitemap-general":{"prefix":"https://zlogs.net/gitbook-action/"},"fontsettings":{"theme":"white","family":"sans","size":2},"gtag":{"token":""},"tabs2":{},"highlight":{},"theme-simple":{"showLevel":false,"styles":{"ebook":"styles/ebook.css","epub":"styles/epub.css","mobi":"styles/mobi.css","pdf":"styles/pdf.css","print":"styles/print.css","website":"styles/website.css"}},"copy-code-button":{},"edit-link":{"label":"EDIT","base":"https://github.com/Ocelot-Social-Community/Ocelot-Social/edit/master/"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"busFaktor() e.V.","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Ocelot.Social – Developer Documentation","gitbook":"3.2.3","description":"Developer Documentation by Gitbook-Action"},"file":{"path":"neo4j/README.md","mtime":"2023-03-08T08:34:35.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2023-08-16T10:49:15.104Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Neo4J","level":"1.3","depth":1,"next":{"title":"Backend","level":"1.4","depth":1,"path":"backend/README.md","ref":"backend/README.md","articles":[{"title":"GraphQL","level":"1.4.1","depth":2,"path":"backend/graphql.md","ref":"backend/graphql.md","articles":[]},{"title":"neo4j-graphql-js","level":"1.4.2","depth":2,"path":"backend/neo4j-graphql-js.md","ref":"backend/neo4j-graphql-js.md","articles":[]}]},"previous":{"title":"Edit this Documentation","level":"1.2","depth":1,"path":"edit-this-documentation.md","ref":"edit-this-documentation.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","-sharing","hints","tabs2","theme-simple@git+https://github.com/plugins-zander/gitbook-plugin-theme-simple.git","search-pro@git+https://github.com/plugins-zander/gitbook-plugin-search-pro.git","splitter@git+https://github.com/plugins-zander/gitbook-plugin-splitter.git","edit-link@git+https://github.com/plugins-zander/gitbook-plugin-edit-link.git","gtag@git+https://github.com/plugins-zander/gitbook-plugin-gtag.git","chapter-fold@git+https://github.com/plugins-zander/gitbook-plugin-chapter-fold.git","copy-code-button@git+https://github.com/plugins-zander/gitbook-plugin-copy-code-button.git"],"styles":{"ebook":"styles/ebook.css","epub":"styles/epub.css","mobi":"styles/mobi.css","pdf":"styles/pdf.css","print":"styles/print.css","website":"styles/website.css"},"pluginsConfig":{"chapter-fold":{},"splitter":{},"search-pro":{},"hints":{"danger":"fa fa-exclamation-circle","info":"fa fa-info-circle","tip":"fa fa-mortar-board","working":"fa fa-wrench"},"sitemap-general":{"prefix":"https://zlogs.net/gitbook-action/"},"fontsettings":{"theme":"white","family":"sans","size":2},"gtag":{"token":""},"tabs2":{},"highlight":{},"theme-simple":{"showLevel":false,"styles":{"ebook":"styles/ebook.css","epub":"styles/epub.css","mobi":"styles/mobi.css","pdf":"styles/pdf.css","print":"styles/print.css","website":"styles/website.css"}},"copy-code-button":{},"edit-link":{"label":"EDIT","base":"https://github.com/Ocelot-Social-Community/Ocelot-Social/edit/master/"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"busFaktor() e.V.","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Ocelot.Social – Developer Documentation","gitbook":"3.2.3","description":"Developer Documentation by Gitbook-Action"},"file":{"path":"neo4j/README.md","mtime":"2023-10-10T10:01:58.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2023-10-27T06:52:10.268Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
