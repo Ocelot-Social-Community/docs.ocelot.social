@@ -40,5 +40,8 @@ export default defineUserConfig({
         },
       ],
     }),
+    mdEnhancePlugin({
+      tabs: true,
+    }),
   ],
 })
