@@ -1,8 +1,21 @@
 {
+  "name": "docs.ocelot.social",
+  "version": "1.0.0",
+  "description": "The Ocelot.social documentation website",
+  "main": "index.js",
   "scripts": {
     "dev": "vuepress dev docs",
     "build": "vuepress build docs"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ocelot-Social-Community/docs.ocelot.social.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ocelot-Social-Community/docs.ocelot.social/issues"
+  },
+  "homepage": "https://www.ocelot.social/",  
   "devDependencies": {
     "vuepress": "^2.0.0-beta.67",
     "vuepress-plugin-search-pro": "^2.0.0-beta.243",
