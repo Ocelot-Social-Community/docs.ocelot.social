@@ -12,8 +12,7 @@ export default defineUserConfig({
     favicon: '/favicon.ico',
     logo: '/logo.svg',
     docsRepo: 'https://github.com/Ocelot-Social-Community/Ocelot-Social',
-    docsBranch: 'vuepress2', //'master'
-    docsDir: './docs',
+    docsBranch: 'master',
     editLink: true,
     lastUpdated: false,
     contributors: false,
