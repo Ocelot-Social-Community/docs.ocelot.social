@@ -23,6 +23,11 @@ export default defineUserConfig({
         link: 'https://github.com/Ocelot-Social-Community/Ocelot-Social'
       },
     ],
+    plugins: {
+      mdEnhance: {
+        tabs: true,
+      },
+    },
   }),
   plugins: [
     searchProPlugin({
@@ -38,9 +43,6 @@ export default defineUserConfig({
           formatter: "Tag: $content",
         },
       ],
-    }),
-    mdEnhancePlugin({
-      tabs: true,
     }),
   ],
 })
