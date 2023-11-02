@@ -1,0 +1,27 @@
+name: docs.ocelot.social Build and Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+          uses: actions/checkout@master
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: vuepress-deploy
+      uses: jenkey2011/vuepress-deploy@master
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        TARGET_REPO: IT4Change/IT4C.dev
+        TARGET_BRANCH: gh-pages
+        BUILD_SCRIPT: npm install && npm run build
+        BUILD_DIR: docs/.vuepress/dist
